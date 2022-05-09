@@ -1,21 +1,41 @@
-import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { createAppContainer } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation-stack';
+import { Provider } from './src/context/LapContext';
+import { Provider as OptionsProvider } from './src/context/OptionsContext'
+import { Provider as EventProvider } from './src/context/EventContext'
+import IndexScreen from './src/screens/IndexScreen';
+import CounterScreen from './src/screens/CounterScreen';
+import ShowScreen from './src/screens/ShowScreen';
+import CreateScreen from './src/screens/CreateScreen';
+import EditScreen from './src/screens/EditScreen';
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+const navigator = createStackNavigator(
+  {
+    Index: IndexScreen,
+    Show: ShowScreen,
+    Create: CreateScreen,
+    Edit: EditScreen,
+    Counter: CounterScreen,
   },
-});
+  {
+    initialRouteName: 'Index',
+    defaultNavigationOptions: {
+      title: 'Laps',
+    },
+  }
+);
+
+const App = createAppContainer(navigator);
+
+export default () => {
+  return (
+    <EventProvider>
+    <OptionsProvider>
+    <Provider>
+      <App />
+    </Provider>
+    </OptionsProvider>
+    </EventProvider>
+  );
+};
